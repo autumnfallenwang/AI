@@ -129,11 +129,11 @@ dmypy.json
 .pyre/
 
 # Media
-.mp4
-.avi
+*.mp4
+*.avi
 
 # Trained models
-.pth
-.params
-.caffemodel
+*.pth
+*.params
+*.caffemodel
 
