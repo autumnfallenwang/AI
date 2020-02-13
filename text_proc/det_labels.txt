@@ -1,0 +1,60 @@
+cat/cat.10028.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10067.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10040.jpg,2 1 2 3 4,3 1 2 3 4
+cat/cat.10110.jpg,1 1 2 3 4,0 1 2 3 4
+cat/cat.10103.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10050.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10036.jpg,1 1 2 3 4
+cat/cat.10109.jpg,2 1 2 3 4
+cat/cat.1007.jpg,3 1 2 3 4
+cat/cat.10097.jpg,0 1 2 3 4
+cat/cat.10028.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10067.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10040.jpg,2 1 2 3 4,3 1 2 3 4
+cat/cat.10110.jpg,1 1 2 3 4,0 1 2 3 4
+cat/cat.10103.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10050.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10036.jpg,1 1 2 3 4
+cat/cat.10109.jpg,2 1 2 3 4
+cat/cat.1007.jpg,3 1 2 3 4
+cat/cat.10097.jpg,0 1 2 3 4
+cat/cat.10028.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10067.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10040.jpg,2 1 2 3 4,3 1 2 3 4
+cat/cat.10110.jpg,1 1 2 3 4,0 1 2 3 4
+cat/cat.10103.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10050.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10036.jpg,1 1 2 3 4
+cat/cat.10109.jpg,2 1 2 3 4
+cat/cat.1007.jpg,3 1 2 3 4
+cat/cat.10097.jpg,0 1 2 3 4
+cat/cat.10028.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10067.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10040.jpg,2 1 2 3 4,3 1 2 3 4
+cat/cat.10110.jpg,1 1 2 3 4,0 1 2 3 4
+cat/cat.10103.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10050.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10036.jpg,1 1 2 3 4
+cat/cat.10109.jpg,2 1 2 3 4
+cat/cat.1007.jpg,3 1 2 3 4
+cat/cat.10097.jpg,0 1 2 3 4
+cat/cat.10028.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10067.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10040.jpg,2 1 2 3 4,3 1 2 3 4
+cat/cat.10110.jpg,1 1 2 3 4,0 1 2 3 4
+cat/cat.10103.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10050.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10036.jpg,1 1 2 3 4
+cat/cat.10109.jpg,2 1 2 3 4
+cat/cat.1007.jpg,3 1 2 3 4
+cat/cat.10097.jpg,0 1 2 3 4
+cat/cat.10028.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10067.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10040.jpg,2 1 2 3 4,3 1 2 3 4
+cat/cat.10110.jpg,1 1 2 3 4,0 1 2 3 4
+cat/cat.10103.jpg,0 1 2 3 4,1 1 2 3 4
+cat/cat.10050.jpg,3 1 2 3 4,2 1 2 3 4
+cat/cat.10036.jpg,1 1 2 3 4
+cat/cat.10109.jpg,2 1 2 3 4
+cat/cat.1007.jpg,3 1 2 3 4
+cat/cat.10097.jpg,0 1 2 3 4
