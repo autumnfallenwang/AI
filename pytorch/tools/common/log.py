@@ -23,10 +23,10 @@ class ClsLog(object):
         self.log_df = self.log_df.append(item_df, sort=False)
 
     def write(self, path):
-        self.log_df.to_csv(path, sep='\t', index=False, float_format='%.4g')
+        self.log_df.to_csv(path, sep=',', index=False, float_format='%.4f')
 
     def read(self, path):
-        read_df = pd.read_csv(path, sep='\t')
+        read_df = pd.read_csv(path, sep=',')
         self.log_df.drop(self.log_df.index, inplace=True)
         self.log_df = self.log_df.append(read_df, sort=False)
 
