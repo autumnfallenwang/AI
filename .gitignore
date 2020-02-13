@@ -127,3 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Media
+.mp4
+.avi
+
+# Trained models
+.pth
+.params
+.caffemodel
+
