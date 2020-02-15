@@ -1,8 +1,8 @@
-#MODE = 'TRAIN'
-MODE = 'TEST'
+MODE = 'TRAIN'
+#MODE = 'TEST'
 
 MULTI_GPU = False
-GPU_DEVICE = 0 # single use
+GPU_DEVICE = 3 # single use
 GPU_LIST = [0, 1, 2, 3, 4, 5, 6, 7]
 GPU_COUNT = len(GPU_LIST)
 
@@ -44,14 +44,14 @@ TRAIN_RGB_SD = [0.11965080359974416, 0.08724743240200583, 0.07926250478615704]  
 # kaggle_DR
 DATA_ROOT = '/raid/data/wangqiushi/kaggle/diabetic_retinopathy/'
 IMAGE_ROOT = {
-    'train': DATA_ROOT+'train/',
-    'valid': DATA_ROOT+'train/',
-    'test': DATA_ROOT+'test/',
+    'train': DATA_ROOT+'train_test/',
+    'valid': DATA_ROOT+'train_test/',
+    'test': DATA_ROOT+'train_test/',
 }
 LABEL_PATH = {
-    'train': DATA_ROOT + 'labels/820_shf/train.csv',
-    'valid': DATA_ROOT + 'labels/820_shf/valid.csv',
-    'test': DATA_ROOT + 'labels/test_labels.csv',
+    'train': DATA_ROOT + 'labels/811_mix/train_10.csv',
+    'valid': DATA_ROOT + 'labels/811_mix/valid.csv',
+    'test': DATA_ROOT + 'labels/811_mix/test.csv',
 }
 TRAIN_RGB_MEAN = [0.485, 0.456, 0.406] # Imagenet
 TRAIN_RGB_SD = [0.229, 0.224, 0.225]   # Imagenet
@@ -105,18 +105,18 @@ TRAIN_RGB_MEAN = [0.485, 0.456, 0.406] # Imagenet
 TRAIN_RGB_SD = [0.229, 0.224, 0.225]   # Imagenet
 """
 
-
+"""
 METRICS = {'test_acc': {},
            'confusion_matrix': {},
            'report': {},
            'cohen_kappa_score': {'weights': 'quadratic'},
 }
-
 """
+
 METRICS = {'test_acc': {},
            'cohen_kappa_score': {'weights': 'quadratic'},
 }
-"""
+
 LOG = {'test_acc': {},
        'cohen_kappa_score': {'weights': 'quadratic'},
 }
@@ -128,11 +128,11 @@ SAVE_BEST = ['cohen_kappa_score', 'max']
 FINETUNE = True
 MODEL_TYPE = 'resnet'
 # alexnet / squeezenet / vgg / resnet / densenet
-MODEL_NAME = 'resnext50_32x4d'
+MODEL_NAME = 'wide_resnet50_2'
 
-SAVE_DIR = '/raid/code/wangqiushi/pycode/pytorch/projects/kaggle_balance/'
+SAVE_DIR = '/raid/code/wangqiushi/pycode/pytorch/projects/kaggle_mix/'
 SAVED_LOGS = SAVE_DIR + 'logs/'
 SAVED_MODELS = SAVE_DIR + 'saved_models/'
-SAVED_PREFIX = MODEL_NAME  + '-shf-'
+SAVED_PREFIX = MODEL_NAME  + '-train_10-orig-'
 
 TEST_MODEL_PATH = SAVED_MODELS + 'resnext50_32x4d-shf-20200212070016.pth'
