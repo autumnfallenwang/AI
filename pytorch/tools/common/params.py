@@ -2,7 +2,7 @@ MODE = 'TRAIN'
 #MODE = 'TEST'
 
 MULTI_GPU = False
-GPU_DEVICE = 3 # single use
+GPU_DEVICE = 0 # single use
 GPU_LIST = [0, 1, 2, 3, 4, 5, 6, 7]
 GPU_COUNT = len(GPU_LIST)
 
@@ -49,7 +49,7 @@ IMAGE_ROOT = {
     'test': DATA_ROOT+'train_test/',
 }
 LABEL_PATH = {
-    'train': DATA_ROOT + 'labels/811_mix/train_10.csv',
+    'train': DATA_ROOT + 'labels/811_mix/train_1.csv',
     'valid': DATA_ROOT + 'labels/811_mix/valid.csv',
     'test': DATA_ROOT + 'labels/811_mix/test.csv',
 }
@@ -126,13 +126,13 @@ LOG = {'test_acc': {},
 SAVE_BEST = ['cohen_kappa_score', 'max']
 
 FINETUNE = True
-MODEL_TYPE = 'resnet'
+MODEL_TYPE = 'vgg'
 # alexnet / squeezenet / vgg / resnet / densenet
-MODEL_NAME = 'wide_resnet50_2'
+MODEL_NAME = 'vgg13_bn'
 
 SAVE_DIR = '/raid/code/wangqiushi/pycode/pytorch/projects/kaggle_mix/'
 SAVED_LOGS = SAVE_DIR + 'logs/'
 SAVED_MODELS = SAVE_DIR + 'saved_models/'
-SAVED_PREFIX = MODEL_NAME  + '-train_10-orig-'
+SAVED_PREFIX = MODEL_NAME  + '-train_1-orig-'
 
 TEST_MODEL_PATH = SAVED_MODELS + 'resnext50_32x4d-shf-20200212070016.pth'
