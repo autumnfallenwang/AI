@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 import os
 import random
 import torch
@@ -12,7 +12,7 @@ import torch.nn.functional as F
 #import torchvision.transforms as transforms
 import torchvision.utils as vutils
 from torchvision import datasets, transforms
-from torch.autograd import Variable
+# from torch.autograd import Variable
 
 
 data_root = '/raid/data/wangqiushi/catdog/'
@@ -189,7 +189,7 @@ def test():
     val_len = len(testloader.dataset)
     for data, target in testloader:
         data, target = data.cuda(), torch.LongTensor(target).cuda()
-        data, target = Variable(data, volatile=True), Variable(target)
+        # data, target = Variable(data, volatile=True), Variable(target)
         output = netD(data)
         test_loss += F.cross_entropy(output, target, size_average=False).data.item() # sum up batch loss
         #test_loss += torch.nn.MultiLabelSoftMarginLoss(output, target, size_average=False).data[0] # sum up batch loss
@@ -218,7 +218,7 @@ criterionG.cuda()
 input, label = input.cuda(), label.cuda()
 noise, fixed_noise = noise.cuda(), fixed_noise.cuda()
 
-fixed_noise = Variable(fixed_noise) # A fixed (mean, variance) noise distribution # just for testing
+# fixed_noise = Variable(fixed_noise) # A fixed (mean, variance) noise distribution # just for testing
 
 # setup optimizer
 optimizerD = optim.Adam(netD.parameters(), lr=lr, betas=(momentum, 0.999))
@@ -237,20 +237,20 @@ for epoch in range(1, epochs + 1):
         batch_size = real_data.size(0)
         real_data = real_data.cuda()
         input.resize_as_(real_data).copy_(real_data)
-        inputv = Variable(input)
-        real_labelv = Variable(real_label)
-        input_labelv = Variable(input_label)
-        label_input = inputv[:100]
-        unlabel_input = inputv[100:]
+        # inputv = Variable(input)
+        # real_labelv = Variable(real_label)
+        # input_labelv = Variable(input_label)
+        label_input = input[:100]
+        unlabel_input = input[100:]
         l_label = real_label[:100]
-        l_labelv = Variable(l_label).cuda()
+        # l_labelv = Variable(l_label).cuda()
         l_output = netD(label_input)
         loss_label = criterionD(l_output, l_labelv)
         unl_output = netD(unlabel_input)
         loss_unl_real = -torch.mean(LSE(unl_output),0) +  torch.mean(F.softplus(LSE(unl_output),1),0)
         #train with fake
         noise.resize_(int(batch_size/2), nz, 1, 1).normal_(0, 1)
-        noisev = Variable(noise)
+        # noisev = Variable(noise)
         fake = netG(noisev)
         unl_output = netD(fake.detach()) #fake images are separated from the graph #results will never gradient(be updated), so G will not be updated
         loss_unl_fake = torch.mean(F.softplus(LSE(unl_output),1),0)
@@ -259,12 +259,12 @@ for epoch in range(1, epochs + 1):
         optimizerD.step()
 
         ############################
-        # (2) Update G network: maximize log(D(G(z))) 
+        # (2) Update G network: maximize log(D(G(z)))
         ###########################
         netG.zero_grad()
         #labelv = Variable(label.fill_(real_label))  # fake labels are real for generator cost
         ####### feature matching ########
-        feature_real,_ = netD(inputv.detach(),matching=True)
+        feature_real,_ = netD(input.detach(),matching=True)
         feature_fake,output = netD(fake,matching=True)
         feature_real = torch.mean(feature_real,0)
         feature_fake = torch.mean(feature_fake,0)
