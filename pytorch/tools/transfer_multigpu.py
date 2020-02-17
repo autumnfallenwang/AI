@@ -271,7 +271,7 @@ def train_model(model, criterion, optimizer, scheduler, metrics, log, epochs):
 
 print('Loading Model...')
 print('-' * 80)
-model = get_parallel_model(dataset_class_num, MULTI_GPU, GPU_LIST, DEVICE)
+model = get_parallel_model(dataset_class_num, FINETUNE, MODEL_TYPE, MODEL_NAME, MULTI_GPU, GPU_LIST, DEVICE)
 
 optimizer, criterion, scheduler = init_model(model, LR, LR_STEP, MOMENTUM, WEIGHT_DECAY)
 

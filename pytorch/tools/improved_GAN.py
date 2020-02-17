@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 import os
+import os.path as osp
+import sys
 import random
 import torch
 import torch.nn as nn
-import torch.nn.parallel
-import torch.backends.cudnn as cudnn
+# import torch.nn.parallel
+# import torch.backends.cudnn as cudnn
 import torch.optim as optim
-import torch.utils.data
-import torchvision.datasets as dset
+# import torch.utils.data
+# import torchvision.datasets as dset
 import torch.nn.functional as F
-#import torchvision.transforms as transforms
 import torchvision.utils as vutils
-from torchvision import datasets, transforms
-# from torch.autograd import Variable
+from torchvision import transforms
+
+sys.path.append('../')
 
 
 data_root = '/raid/data/wangqiushi/catdog/'
@@ -32,14 +34,12 @@ log_interval = 5000
 test_interval = 5000
 continue_netD = '' #"path to netD (to continue training"
 continue_netG = '' #"path to netG (to continue training"
-cudnn.benchmark = True
+# cudnn.benchmark = True
 fsave = open('accuracy.txt','w')
 
-if os.path.isdir('./fake'):
-   pass
-else:
-   os.mkdir('./fake')
+os.mkdirs('./fake', exist_ok=True)
 
+"""
 dataloader = torch.utils.data.DataLoader(
     datasets.ImageFolder(root=data_root,
                          transform=transforms.Compose([
@@ -48,7 +48,7 @@ dataloader = torch.utils.data.DataLoader(
                    	        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                    	        ]))
     ,batch_size=batch_size, shuffle=True, num_workers=16)
-
+"""
 class_num = len(dataloader.dataset.classes)
 
 """
@@ -71,7 +71,71 @@ testloader = torch.utils.data.DataLoader(
                     ]))
     ,batch_size=batch_size, shuffle=False, num_workers=16)
 """
-testloader = dataloader
+
+
+# testloader = dataloader
+assert torch.cuda.is_available()
+DEVICE = torch.device('cuda:0')
+
+torch.backends.cudnn.benchmark=True
+
+torchvision.set_image_backend('accimage')
+print("| Image Backend: %s" % torchvision.get_image_backend())
+print()
+
+print('Loading Data...')
+print('-' * 80)
+normalize = transforms.Normalize(TRAIN_RGB_MEAN,
+                                 TRAIN_RGB_SD)
+transform = {
+    'train': transforms.Compose([
+        transforms.Resize(RESIZE_SIZE),
+        transforms.RandomCrop(CROP_SIZE),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        normalize
+        ]),
+    'valid': transforms.Compose([
+        transforms.Resize(RESIZE_SIZE),
+        transforms.CenterCrop(CROP_SIZE),
+        transforms.ToTensor(),
+        normalize
+        ]),
+    'test': transforms.Compose([
+        transforms.Resize(RESIZE_SIZE),
+        transforms.CenterCrop(CROP_SIZE),
+        transforms.ToTensor(),
+        normalize
+        ]),
+}
+
+print('| Load Train, Valid, Test Dataset:')
+
+datasets = {
+    x : ClsDataset(image_root=IMAGE_ROOT[x],
+                   label_path=LABEL_PATH[x],
+                   shuffle=True,
+                   transform=transform[x])
+    for x in ['train', 'valid', 'test']
+}
+
+for x in ['train', 'valid', 'test']:
+    print('| '+x+': '+LABEL_PATH[x])
+print()
+
+dataloaders = {
+    x : DataLoader(dataset=datasets[x],
+                   batch_size=BATCHSIZE,
+                   shuffle=(x=='train'),
+                   num_workers=16,
+                   pin_memory=True)
+    for x in ['train', 'valid', 'test']
+}
+
+dataset_sizes = {x: len(datasets[x]) for x in ['train', 'valid', 'test']}
+dataset_classes = datasets['train'].classes
+dataset_class_num = datasets['train'].class_num
+
 
 # custom weights initialization called on netG and netD
 def weights_init(m):
@@ -243,15 +307,15 @@ for epoch in range(1, epochs + 1):
         label_input = input[:100]
         unlabel_input = input[100:]
         l_label = real_label[:100]
-        # l_labelv = Variable(l_label).cuda()
+        l_label = l_label.cuda()
         l_output = netD(label_input)
-        loss_label = criterionD(l_output, l_labelv)
+        loss_label = criterionD(l_output, l_label)
         unl_output = netD(unlabel_input)
         loss_unl_real = -torch.mean(LSE(unl_output),0) +  torch.mean(F.softplus(LSE(unl_output),1),0)
         #train with fake
         noise.resize_(int(batch_size/2), nz, 1, 1).normal_(0, 1)
         # noisev = Variable(noise)
-        fake = netG(noisev)
+        fake = netG(noise)
         unl_output = netD(fake.detach()) #fake images are separated from the graph #results will never gradient(be updated), so G will not be updated
         loss_unl_fake = torch.mean(F.softplus(LSE(unl_output),1),0)
         loss_D = loss_label + loss_unl_real + loss_unl_fake
@@ -284,7 +348,7 @@ for epoch in range(1, epochs + 1):
             test()
 
     # do checkpointing
-    torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (outf, epoch))
-    torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (outf, epoch))
+    # torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (outf, epoch))
+    # torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (outf, epoch))
 
 fsave.close()

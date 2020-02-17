@@ -11,7 +11,6 @@ from torch.utils.data import Dataset
 from PIL import Image, ImageStat
 from torchvision import models
 
-from .params import FINETUNE, MODEL_TYPE, MODEL_NAME
 sys.path.append('../../')
 from text_proc.utils.label_class import ClsLabel
 
@@ -68,29 +67,29 @@ class ClsDataset(Dataset):
         return self.label_num
 
 
-def get_model(class_num):
+def get_model(class_num, finetune, model_type, model_name):
 
-    pretrain_str = 'pretrained='+str(FINETUNE)
-    model_str = 'models.' + MODEL_NAME
+    pretrain_str = 'pretrained='+str(finetune)
+    model_str = 'models.' + model_name
     model_eval = model_str + '(' + pretrain_str + ')'
     model = eval(model_eval)
 
-    if MODEL_TYPE in ['alexnet', 'vgg']:
+    if model_type in ['alexnet', 'vgg']:
         num_ftrs = model.classifier[6].in_features
         feature_model = list(model.classifier.children())
         feature_model.pop()
         feature_model.append(nn.Linear(num_ftrs, class_num))
         model.classifier = nn.Sequential(*feature_model)
 
-    elif MODEL_TYPE in ['resnet', 'inception', 'googlenet', 'shufflenet']:
+    elif model_type in ['resnet', 'inception', 'googlenet', 'shufflenet']:
         num_ftrs = model.fc.in_features
         model.fc = nn.Linear(num_ftrs, class_num)
 
-    elif MODEL_TYPE in ['densenet']:
+    elif model_type in ['densenet']:
         num_ftrs = model.classifier.in_features
         model.classifier = nn.Linear(num_ftrs, class_num)
 
-    elif MODEL_TYPE in ['mnasnet', 'mobilenet']:
+    elif model_type in ['mnasnet', 'mobilenet']:
         num_ftrs = model.classifier[1].in_features
         feature_model = list(model.classifier.children())
         feature_model.pop()
@@ -100,8 +99,8 @@ def get_model(class_num):
     return model
 
 
-def get_parallel_model(class_num, multi_gpu, gpu_list, device):
-    model = get_model(class_num)
+def get_parallel_model(class_num, finetune, model_type, model_name, multi_gpu, gpu_list, device):
+    model = get_model(class_num, finetune, model_type, model_name)
     if multi_gpu:
         model = nn.DataParallel(model, gpu_list) # device_ids
     # CUDA
