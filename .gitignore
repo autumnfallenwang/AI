@@ -132,6 +132,12 @@ dmypy.json
 *.mp4
 *.avi
 
+# Image
+*.jpg
+*.jpeg
+*.png
+*.bmp
+
 # Trained models
 *.pth
 *.params

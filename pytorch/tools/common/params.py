@@ -49,7 +49,7 @@ IMAGE_ROOT = {
     'test': DATA_ROOT+'train_test/',
 }
 LABEL_PATH = {
-    'train': DATA_ROOT + 'labels/811_mix/train_1.csv',
+    'train': DATA_ROOT + 'labels/811_mix/train_5.csv',
     'valid': DATA_ROOT + 'labels/811_mix/valid.csv',
     'test': DATA_ROOT + 'labels/811_mix/test.csv',
 }

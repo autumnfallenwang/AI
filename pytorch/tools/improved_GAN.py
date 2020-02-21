@@ -8,17 +8,22 @@ import torch.nn as nn
 # import torch.nn.parallel
 # import torch.backends.cudnn as cudnn
 import torch.optim as optim
+from torch.utils.data import DataLoader
 # import torch.utils.data
 # import torchvision.datasets as dset
 import torch.nn.functional as F
+import torchvision
 import torchvision.utils as vutils
 from torchvision import transforms
+from common.utils import ClsDataset
+from common.params import IMAGE_ROOT, LABEL_PATH, TRAIN_RGB_MEAN, TRAIN_RGB_SD
 
-sys.path.append('../')
 
+RESIZE_SIZE = (32, 32)
+CROP_SIZE = (32, 32)
 
-data_root = '/raid/data/wangqiushi/catdog/'
-cifar10_root = '/raid/data/wangqiushi/cifar10/'
+#data_root = '/raid/data/wangqiushi/catdog/'
+#cifar10_root = '/raid/data/wangqiushi/cifar10/'
 
 batch_size = 200 #training batch_size
 momentum = 0.5 #adam parameter
@@ -37,7 +42,7 @@ continue_netG = '' #"path to netG (to continue training"
 # cudnn.benchmark = True
 fsave = open('accuracy.txt','w')
 
-os.mkdirs('./fake', exist_ok=True)
+os.makedirs('./fake', exist_ok=True)
 
 """
 dataloader = torch.utils.data.DataLoader(
@@ -48,8 +53,8 @@ dataloader = torch.utils.data.DataLoader(
                    	        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                    	        ]))
     ,batch_size=batch_size, shuffle=True, num_workers=16)
-"""
 class_num = len(dataloader.dataset.classes)
+"""
 
 """
 dataloader = torch.utils.data.DataLoader(
@@ -125,7 +130,7 @@ print()
 
 dataloaders = {
     x : DataLoader(dataset=datasets[x],
-                   batch_size=BATCHSIZE,
+                   batch_size=batch_size,
                    shuffle=(x=='train'),
                    num_workers=16,
                    pin_memory=True)
@@ -135,6 +140,10 @@ dataloaders = {
 dataset_sizes = {x: len(datasets[x]) for x in ['train', 'valid', 'test']}
 dataset_classes = datasets['train'].classes
 dataset_class_num = datasets['train'].class_num
+
+
+dataloader = dataloaders['train']
+testloader = dataloaders['valid']
 
 
 # custom weights initialization called on netG and netD
@@ -179,7 +188,7 @@ class _netG(nn.Module):
 
 
 netG = _netG()
-#netG.apply(weights_init)
+netG.apply(weights_init)
 
 
 
@@ -203,7 +212,7 @@ class _netD(nn.Module):
             nn.BatchNorm2d(ndf * 8),
         )
         self.main2 = nn.Sequential(
-            nn.Linear(1024, class_num),
+            nn.Linear(1024, dataset_class_num),
         )
         self.main3 = nn.Sequential(
             nn.Sigmoid()
@@ -220,7 +229,7 @@ class _netD(nn.Module):
 
 
 netD = _netD()
-#netD.apply(weights_init)
+netD.apply(weights_init)
 # if continue_netD != '':
 #     netD.load_state_dict(torch.load(continue_netD))
 # print(netD)
@@ -231,6 +240,8 @@ def to_scalar(var):
 
 def argmax(vec):
     # return the argmax as a python int
+    # print(vec)
+    # print(type(vec))
     _, idx = torch.max(vec, 1)
     return to_scalar(idx)
 
