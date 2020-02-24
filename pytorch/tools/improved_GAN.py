@@ -16,14 +16,8 @@ import torchvision
 import torchvision.utils as vutils
 from torchvision import transforms
 from common.utils import ClsDataset
-from common.params import IMAGE_ROOT, LABEL_PATH, TRAIN_RGB_MEAN, TRAIN_RGB_SD
+from common.params import IMAGE_ROOT, LABEL_PATH
 
-
-RESIZE_SIZE = (32, 32)
-CROP_SIZE = (32, 32)
-
-#data_root = '/raid/data/wangqiushi/catdog/'
-#cifar10_root = '/raid/data/wangqiushi/cifar10/'
 
 batch_size = 200 #training batch_size
 momentum = 0.5 #adam parameter
@@ -39,10 +33,14 @@ log_interval = 5000
 test_interval = 5000
 continue_netD = '' #"path to netD (to continue training"
 continue_netG = '' #"path to netG (to continue training"
-# cudnn.benchmark = True
-fsave = open('accuracy.txt','w')
 
+fsave = open('accuracy.txt','w')
 os.makedirs('./fake', exist_ok=True)
+
+RESIZE_SIZE = (imageSize, imageSize)
+CROP_SIZE = (imageSize, imageSize)
+TRAIN_RGB_MEAN = (0.5, 0.5, 0.5)
+TRAIN_RGB_SD = (0.5, 0.5, 0.5)
 
 """
 dataloader = torch.utils.data.DataLoader(
@@ -132,8 +130,9 @@ dataloaders = {
     x : DataLoader(dataset=datasets[x],
                    batch_size=batch_size,
                    shuffle=(x=='train'),
-                   num_workers=16,
-                   pin_memory=True)
+                   num_workers=(16 if x=='train' else 4),
+                   pin_memory=True,
+                   drop_last=True)
     for x in ['train', 'valid', 'test']
 }
 
