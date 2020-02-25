@@ -1,25 +1,22 @@
 import argparse
 import os
+import os.path as osp
+import random
 import numpy as np
 import math
 
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import DataLoader
+from torch.autograd import Variable
 import torchvision
 import torchvision.transforms as transforms
 from torchvision.utils import save_image
 
-from torch.utils.data import DataLoader
-# from torchvision import datasets
-from torch.autograd import Variable
-
-import torch.nn as nn
-import torch.nn.functional as F
-import torch
-
 from common.utils import ClsDataset
 from common.params import IMAGE_ROOT, LABEL_PATH
 
-
-os.makedirs("images", exist_ok=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--n_epochs", type=int, default=200, help="number of epochs of training")
@@ -37,10 +34,21 @@ print(opt)
 
 cuda = True if torch.cuda.is_available() else False
 
+manual_seed = 233
+# manual_seed = random.randint(1, 10000)
+print('| Random Seed: %d' % manual_seed)
+os.environ['PYTHONHASHSEED'] = str(manual_seed)
+random.seed(manual_seed)
+np.random.seed(manual_seed)
+torch.manual_seed(manual_seed)
+
+save_image_root = './images'
+os.makedirs(save_image_root, exist_ok=True)
+
 RESIZE_SIZE = (opt.img_size, opt.img_size)
 CROP_SIZE = (opt.img_size, opt.img_size)
-TRAIN_RGB_MEAN = [0.5, 0.5, 0.5]
-TRAIN_RGB_SD = [0.5, 0.5, 0.5]
+TRAIN_RGB_MEAN = (0.5, 0.5, 0.5)
+TRAIN_RGB_SD = (0.5, 0.5, 0.5)
 
 assert torch.cuda.is_available()
 DEVICE = torch.device('cuda:0')
@@ -96,7 +104,7 @@ dataloaders = {
     x : DataLoader(dataset=datasets[x],
                    batch_size=opt.batch_size,
                    shuffle=(x=='train'),
-                   num_workers=16,
+                   num_workers=(16 if x=='train' else 4),
                    pin_memory=True)
     for x in ['train', 'valid', 'test']
 }
@@ -266,4 +274,4 @@ for epoch in range(opt.n_epochs):
 
         batches_done = epoch * len(dataloader) + i
         if batches_done % opt.sample_interval == 0:
-            save_image(gen_imgs.data[:25], "images_256/%d.png" % batches_done, nrow=5, normalize=True)
+            save_image(gen_imgs.data[:25], "%s/%d.png" % (save_image_root, batches_done), nrow=5, normalize=True)
