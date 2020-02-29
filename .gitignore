@@ -131,6 +131,9 @@ dmypy.json
 # pycharm
 .idea/
 
+# macOS
+*.DS_Store
+
 # Media
 *.mp4
 *.avi
