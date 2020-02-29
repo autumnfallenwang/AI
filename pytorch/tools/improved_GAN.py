@@ -37,6 +37,20 @@ continue_netG = '' #"path to netG (to continue training"
 fsave = open('accuracy.txt','w')
 os.makedirs('./fake', exist_ok=True)
 
+manual_seed = 233
+# manual_seed = random.randint(1, 10000)
+print('| Random Seed: %d\n' % manual_seed)
+os.environ['PYTHONHASHSEED'] = str(manual_seed)
+random.seed(manual_seed)
+np.random.seed(manual_seed)
+torch.manual_seed(manual_seed)
+
+assert torch.cuda.is_available()
+device = torch.device('cuda:0')
+torch.backends.cudnn.benchmark=True
+torchvision.set_image_backend('accimage')
+print("| Image Backend: %s\n" % torchvision.get_image_backend())
+
 RESIZE_SIZE = (imageSize, imageSize)
 CROP_SIZE = (imageSize, imageSize)
 TRAIN_RGB_MEAN = (0.5, 0.5, 0.5)
@@ -77,14 +91,6 @@ testloader = torch.utils.data.DataLoader(
 
 
 # testloader = dataloader
-assert torch.cuda.is_available()
-DEVICE = torch.device('cuda:0')
-
-torch.backends.cudnn.benchmark=True
-
-torchvision.set_image_backend('accimage')
-print("| Image Backend: %s" % torchvision.get_image_backend())
-print()
 
 print('Loading Data...')
 print('-' * 80)
