@@ -68,7 +68,7 @@ dataloader = torch.utils.data.DataLoader(
 class_num = len(dataloader.dataset.classes)
 """
 
-"""
+cifar10_root = '/raid/data/wangqiushi/cifar10/'
 dataloader = torch.utils.data.DataLoader(
     datasets.CIFAR10(root=cifar10_root, train=True,
                      transform=transforms.Compose([
@@ -77,21 +77,20 @@ dataloader = torch.utils.data.DataLoader(
                          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                          ]))
     ,batch_size=batch_size, shuffle=True, num_workers=16)
-"""
-"""
+
 testloader = torch.utils.data.DataLoader(
-    datasets.ImageFolder(root=data_root,
+    datasets.CIFAR10(root=cifar10_root, train=False,
                    transform=transforms.Compose([
                     transforms.Resize(imageSize),
                     transforms.ToTensor(),
                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                     ]))
     ,batch_size=batch_size, shuffle=False, num_workers=16)
+
+dataset_class_num = 10
+
+
 """
-
-
-# testloader = dataloader
-
 print('Loading Data...')
 print('-' * 80)
 normalize = transforms.Normalize(TRAIN_RGB_MEAN,
@@ -149,16 +148,16 @@ dataset_class_num = datasets['train'].class_num
 
 dataloader = dataloaders['train']
 testloader = dataloaders['valid']
-
+"""
 
 # custom weights initialization called on netG and netD
 def weights_init(m):
     classname = m.__class__.__name__
     if classname.find('Conv') != -1:
-        m.weight.data.normal_(0.0, 0.02)
+        nn.init.normal_(m.weight.data, 0.0, 0.02)
     elif classname.find('BatchNorm') != -1:
-        m.weight.data.normal_(1.0, 0.02)
-        m.bias.data.fill_(0)
+        nn.init.normal_(m.weight.data, 1.0, 0.02)
+        nn.init.constant_(m.bias.data, 0)
 
 
 class _netG(nn.Module):
@@ -327,7 +326,7 @@ for epoch in range(1, epochs + 1):
         l_output = netD(label_input)
         loss_label = criterionD(l_output, l_label)
         unl_output = netD(unlabel_input)
-        loss_unl_real = -torch.mean(LSE(unl_output),0) +  torch.mean(F.softplus(LSE(unl_output),1),0)
+        loss_unl_real = -torch.mean(LSE(unl_output),0) + torch.mean(F.softplus(LSE(unl_output),1),0)
         #train with fake
         noise.resize_(int(batch_size/2), nz, 1, 1).normal_(0, 1)
         # noisev = Variable(noise)
