@@ -2,10 +2,10 @@ import os.path as osp
 from utils.label_class import ClsLabel
 
 
-label_path = '/raid/data/wangqiushi/kaggle/diabetic_retinopathy/labels/mix_labels.csv'
-split_rate = [0.8, 0.1, 0.1]
+label_path = '/home/wangqiushi/github/covid19_chestxray/labels/label_covid.csv'
+split_rate = [0.7, 0.3, 0.0]
 random_seed = 233
-save_root = '/raid/data/wangqiushi/kaggle/diabetic_retinopathy/labels/811_mix/'
+save_root = '/home/wangqiushi/github/covid19_chestxray/labels/label_covid/'
 balance_train = False
 balance_method = 'oversample_times'
 

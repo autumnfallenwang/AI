@@ -58,10 +58,10 @@ transform_test = transforms.Compose([
 ])
 
 
-image_root = '/raid/data/kaggle/diabetic_retinopathy/train/'
-train_label = '/raid/data/kaggle/diabetic_retinopathy/labels/train.txt'
-val_label = '/raid/data/kaggle/diabetic_retinopathy/labels/valid.txt'
-test_label = '/raid/data/kaggle/diabetic_retinopathy/labels/test.txt'
+image_root = '/raid/data/wangqiushi/kaggle/diabetic_retinopathy/train/'
+train_label = '/raid/data/wangqiushi/kaggle/diabetic_retinopathy/labels/train.txt'
+val_label = '/raid/data/wangqiushi/kaggle/diabetic_retinopathy/labels/valid.txt'
+test_label = '/raid/data/wangqiushi/kaggle/diabetic_retinopathy/labels/test.txt'
 
 train_data = gluon.data.DataLoader(
     ImageLabelDataset(image_root, train_label, shuffle=True).transform_first(transform_train),

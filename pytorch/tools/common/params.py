@@ -40,7 +40,7 @@ LABEL_FILES = {
 TRAIN_RGB_MEAN = [0.5835075779815229, 0.34801369344856836, 0.28106787981796433] # digestive8
 TRAIN_RGB_SD = [0.11965080359974416, 0.08724743240200583, 0.07926250478615704]   # digestive8
 """
-
+"""
 # kaggle_DR
 DATA_ROOT = '/raid/data/wangqiushi/kaggle/diabetic_retinopathy/'
 IMAGE_ROOT = {
@@ -52,6 +52,22 @@ LABEL_PATH = {
     'train': DATA_ROOT + 'labels/811_mix/train_5.csv',
     'valid': DATA_ROOT + 'labels/811_mix/valid.csv',
     'test': DATA_ROOT + 'labels/811_mix/test.csv',
+}
+TRAIN_RGB_MEAN = [0.485, 0.456, 0.406] # Imagenet
+TRAIN_RGB_SD = [0.229, 0.224, 0.225]   # Imagenet
+"""
+
+# covid19-chestxray
+DATA_ROOT = '/home/wangqiushi/github/covid19_chestxray/'
+IMAGE_ROOT = {
+    'train': DATA_ROOT+'covid-chestxray-dataset/images/',
+    'valid': DATA_ROOT+'covid-chestxray-dataset/images/',
+    'test': DATA_ROOT+'covid-chestxray-dataset/images/',
+}
+LABEL_PATH = {
+    'train': DATA_ROOT + 'labels/label_covid/train.csv',
+    'valid': DATA_ROOT + 'labels/label_covid/valid.csv',
+    'test': DATA_ROOT + 'labels/label_covid/test.csv',
 }
 TRAIN_RGB_MEAN = [0.485, 0.456, 0.406] # Imagenet
 TRAIN_RGB_SD = [0.229, 0.224, 0.225]   # Imagenet
@@ -112,27 +128,31 @@ METRICS = {'test_acc': {},
            'cohen_kappa_score': {'weights': 'quadratic'},
 }
 """
-
+"""
 METRICS = {'test_acc': {},
            'cohen_kappa_score': {'weights': 'quadratic'},
+}
+"""
+
+METRICS = {'test_acc': {},
 }
 
 LOG = {'test_acc': {},
        'cohen_kappa_score': {'weights': 'quadratic'},
 }
 
-# SAVE_BEST = ['loss', 'min']
-# SAVE_BEST = ['accuracy', 'max']
-SAVE_BEST = ['cohen_kappa_score', 'max']
+# SAVE_BEST = ['test_loss', 'min']
+SAVE_BEST = ['test_acc', 'max']
+# SAVE_BEST = ['cohen_kappa_score', 'max']
 
 FINETUNE = True
-MODEL_TYPE = 'vgg'
+MODEL_TYPE = 'resnet'
 # alexnet / squeezenet / vgg / resnet / densenet
-MODEL_NAME = 'vgg13_bn'
+MODEL_NAME = 'resnet50'
 
-SAVE_DIR = '/raid/code/wangqiushi/pycode/pytorch/projects/kaggle_mix/'
+SAVE_DIR = '/home/wangqiushi/github/pycode/pytorch/projects/covid19/'
 SAVED_LOGS = SAVE_DIR + 'logs/'
 SAVED_MODELS = SAVE_DIR + 'saved_models/'
-SAVED_PREFIX = MODEL_NAME  + '-train_1-orig-'
+SAVED_PREFIX = MODEL_NAME  + '--'
 
 TEST_MODEL_PATH = SAVED_MODELS + 'resnext50_32x4d-shf-20200212070016.pth'
